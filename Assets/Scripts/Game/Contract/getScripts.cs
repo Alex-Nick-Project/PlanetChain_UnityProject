@@ -21,9 +21,11 @@ using TMPro;
 
 public class getScripts : MonoBehaviour
 {
-
+    [SerializeField]
     List<RoomInfo> totalRooms;
+    [SerializeField]
     List<GameObject> currentPlanetRooms;
+    [SerializeField]
     List<GameObject> currentUIRooms;
 
     [SerializeField] // deve esserci draggata la search box
@@ -166,7 +168,7 @@ public class getScripts : MonoBehaviour
     private void AddLobbys(int maxPlayers, int currentPlayers, int timeCreation, int timeOut, int _id, BigInteger WeiPrice, bool clear = false)
     {
         
-        var planetInstance = itemSpawner.updateRooms(maxPlayers); // qui' e' il problema, vorrei pescare il gameobject instanziato tramite la funzione, ma non lo prende e non capisco perche'
+        var planetInstance = itemSpawner.updateRooms(maxPlayers-1); // qui' e' il problema, vorrei pescare il gameobject instanziato tramite la funzione, ma non lo prende e non capisco perche'
 
         RoomInfo ri = planetInstance.AddComponent<RoomInfo>();
         GameObject UIinstance = Instantiate(roomUIPrefab, scrollViewContent);
