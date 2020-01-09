@@ -22,6 +22,31 @@ using TMPro;
 public class getScripts : MonoBehaviour
 {
 
+    List<RoomInfo> totalRooms;
+    List<GameObject> currentPlanetRooms;
+    List<GameObject> currentUIRooms;
+
+    [SerializeField] // deve esserci draggata la search box
+    TMP_InputField searchInput;
+
+    [SerializeField]
+    [Range(1, 10)]
+
+    float sensibility;
+    float sens;
+
+    [SerializeField]
+    ItemSpawner itemSpawner;
+
+    [SerializeField]
+    GameObject roomUIPrefab;
+
+    [SerializeField]
+    Transform scrollViewContent;
+
+    contractSetup contract = new contractSetup();
+
+
     private static getScripts _instance;
 
     public static getScripts Instance { get { return _instance; } }
@@ -40,12 +65,6 @@ public class getScripts : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    GameObject roomUIPrefab;
-
-    [SerializeField]
-    Transform scrollViewContent;
-    contractSetup contract = new contractSetup();
     private void Start()
     {
         if(WalletManager.Instance.GetSelectedWalletData() != null)
@@ -167,8 +186,6 @@ public class getScripts : MonoBehaviour
         currentPlanetRooms.Add(ri.planet);
         totalRooms.Add(ri);
         print(ri.planet = planetInstance);
-
-
     }
     public IEnumerator getRoomsData()
     {
@@ -237,23 +254,7 @@ public class getScripts : MonoBehaviour
         StartCoroutine(GetName(id, bet, prn));
 
     }
-
-    List<RoomInfo> totalRooms;
-    List<GameObject> currentPlanetRooms;
-    List<GameObject> currentUIRooms;
-
-    [SerializeField] // deve esserci draggata la search box
-    TMP_InputField searchInput;
-
-    [SerializeField]
-    [Range(1, 10)]
-    float sensibility;
-
-    [SerializeField]
-    ItemSpawner itemSpawner;
-
     // internal variables
-    float sens;
 
     public void RemoveRoom(RoomInfo ri)
     {
