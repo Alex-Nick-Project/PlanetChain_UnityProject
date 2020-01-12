@@ -322,6 +322,7 @@ public class getScripts : MonoBehaviour
             {
                 float.TryParse(searchInput.text, out sens);
                 sens /= sensibility;
+                print(sens);
 
                 // if the searched price is in range
                 if (Mathf.Approximately(sens, (float)ri.roomPrice + sens) || Mathf.Approximately(sens, (float)ri.roomPrice - sens))
@@ -333,6 +334,10 @@ public class getScripts : MonoBehaviour
                     currentUIRooms.Remove(ri.ui);
                     ri.ui.gameObject.SetActive(false);
                 }
+            }
+            else
+            {
+                ri.ui.gameObject.SetActive(true);
             }
         }
     }
@@ -359,7 +364,7 @@ public class getScripts : MonoBehaviour
         if (WalletManager.Instance.GetSelectedWalletData() != null && isConnected)
         {
             print("has a wallet & is connected");
-            B_openRooms();
+            B_openRooms();  
             anim.SetTrigger("GameLoaded");
         }
         else if (!isConnected)
@@ -373,6 +378,7 @@ public class getScripts : MonoBehaviour
                 print("should start tutorial");
                 anim.SetTrigger("GameLoaded");
                 anim.SetTrigger("Tutorial");
+                PlayerPrefs.SetInt("Tutorial", 1);
             }
             else
             {
