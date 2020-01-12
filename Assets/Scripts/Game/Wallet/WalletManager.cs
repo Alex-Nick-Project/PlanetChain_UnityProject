@@ -162,6 +162,7 @@ public class WalletManager : MonoBehaviour
                 print("refreshing options");
                 walletSelectionDropdown.AddOptions(new List<string> { w.address });
                 walletSelectionDropdown.value = walletSelectionDropdown.options.Count;
+
             }
 
         }

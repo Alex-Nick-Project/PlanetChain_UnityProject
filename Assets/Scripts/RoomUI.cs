@@ -28,6 +28,7 @@ public class RoomUI : MonoBehaviour
     private float timeOut;
     CameraTarget targetInstance;
 
+
     [SerializeField]
     private GameObject planetGO;
 
@@ -175,10 +176,6 @@ public class RoomUI : MonoBehaviour
                     }
             }
         }
-
-    }
-    void Update()
-    {
 
     }
 }

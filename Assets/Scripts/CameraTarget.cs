@@ -12,7 +12,7 @@ public class CameraTarget : MonoBehaviour
     bool moveToPlanet;
 
     [SerializeField]
-    RoomUI rUI;
+    RoomUI rUI, oldRUI;
 
     public void SetTarget(Transform target)
     {
@@ -36,8 +36,9 @@ public class CameraTarget : MonoBehaviour
             CamFunction(planCam, other.transform);
             planCam.gameObject.SetActive(true);
             roamCam.gameObject.SetActive(false);
-
+            transform.position = other.transform.position;
             moveToPlanet = false;
+            oldRUI = rUI;
 
             if (rUI.canBeClosed)
             {
@@ -64,9 +65,10 @@ public class CameraTarget : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         //isFollowing = false; to be set on destination reached
-        rUI.stage = 0;
-            rUI.rdyToNextState = false;
-            rUI.UpdateButtonStatus();
+        print("test");
+        oldRUI.stage = 0;
+        oldRUI.rdyToNextState = false;
+        oldRUI.UpdateButtonStatus();
             
     }
 

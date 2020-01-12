@@ -24,11 +24,13 @@ public class getScripts : MonoBehaviour
     public bool isConnected;
 
     [SerializeField]
+    RectTransform content;
+    [SerializeField]
     List<RoomInfo> totalRooms;
     [SerializeField]
     List<GameObject> currentPlanetRooms;
     [SerializeField]
-    List<GameObject> currentUIRooms;
+    public List<GameObject> currentUIRooms;
 
     [SerializeField] // deve esserci draggata la search box
     TMP_InputField searchInput;
@@ -185,9 +187,9 @@ public class getScripts : MonoBehaviour
 
     private void AddLobbys(int maxPlayers, int currentPlayers, int timeCreation, int timeOut, int _id, BigInteger WeiPrice, bool clear = false)
     {
-        if(totalRooms.Count != 0)
+        if (totalRooms.Count != 0)
         {
-            if(totalRooms.Any(f => f.roomID == _id))
+            if (totalRooms.Any(f => f.roomID == _id))
             {
                 print("test");
                 return;
@@ -238,7 +240,12 @@ public class getScripts : MonoBehaviour
             currentPlanetRooms.Add(ri.planet);
             totalRooms.Add(ri);
             print(ri.planet = planetInstance);
-        }   
+        }
+
+        // code to extend panel based on room amount
+        float size = 200f;
+        int numberOfListed = currentUIRooms.Count;
+        content.sizeDelta = new UnityEngine.Vector2(content.rect.width, numberOfListed * size);
     }
 
     public IEnumerator GetName(int id, BigInteger bet, int prn, string selection = "JoinRoom")
@@ -262,7 +269,7 @@ public class getScripts : MonoBehaviour
                     switch (selection)
                     {
                         case "JoinRoom":
-                            transictionScripts.Instance._JoinRoom(id, bet,prn);
+                            transictionScripts.Instance._JoinRoom(id, bet, prn);
                             break;
                         case "CreateRoom":
                             transictionScripts.Instance._CreateRoom();
@@ -275,7 +282,7 @@ public class getScripts : MonoBehaviour
                     switch (selection)
                     {
                         case "JoinRoom":
-                            transictionScripts.Instance._JoinRoom(id, bet,prn);
+                            transictionScripts.Instance._JoinRoom(id, bet, prn);
                             break;
                         case "CreateRoom":
                             transictionScripts.Instance._CreateRoom();
