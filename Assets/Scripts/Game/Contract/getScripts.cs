@@ -191,7 +191,7 @@ public class getScripts : MonoBehaviour
         {
             if (totalRooms.Any(f => f.roomID == _id))
             {
-                print("test");
+                
                 return;
             }
             else
@@ -215,7 +215,7 @@ public class getScripts : MonoBehaviour
                 currentUIRooms.Add(ri.ui);
                 currentPlanetRooms.Add(ri.planet);
                 totalRooms.Add(ri);
-                print(ri.planet = planetInstance);
+              
             }
         }
         else
@@ -239,7 +239,7 @@ public class getScripts : MonoBehaviour
             currentUIRooms.Add(ri.ui);
             currentPlanetRooms.Add(ri.planet);
             totalRooms.Add(ri);
-            print(ri.planet = planetInstance);
+         
         }
 
         // code to extend panel based on room amount
@@ -341,6 +341,12 @@ public class getScripts : MonoBehaviour
     {
         isUpdating = true;
 
+        if (WalletManager.Instance.GetSelectedWalletData() == null && !isConnected)
+        {
+            print("deleting tutorial key");
+            PlayerPrefs.DeleteKey("Tutorial");
+        }
+
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
             isConnected = true;
@@ -348,12 +354,6 @@ public class getScripts : MonoBehaviour
         else
         {
             isConnected = false;
-        }
-
-        if (WalletManager.Instance.GetSelectedWalletData() == null)
-        {
-            print("deleting tutorial key");
-            PlayerPrefs.DeleteKey("Tutorial");
         }
 
         if (WalletManager.Instance.GetSelectedWalletData() != null && isConnected)

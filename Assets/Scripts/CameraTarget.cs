@@ -16,7 +16,7 @@ public class CameraTarget : MonoBehaviour
 
     public void SetTarget(Transform target)
     {
-        print("setting target");
+       
         CamFunction(roamCam, target);
         roamCam.transform.position = planCam.transform.position;
         roamCam.transform.rotation = planCam.transform.rotation;

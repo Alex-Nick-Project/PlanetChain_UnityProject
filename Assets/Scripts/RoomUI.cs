@@ -3,6 +3,7 @@ using System;
 using System.Numerics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomUI : MonoBehaviour
 {
@@ -28,14 +29,20 @@ public class RoomUI : MonoBehaviour
     private float timeOut;
     CameraTarget targetInstance;
 
+    [SerializeField]
+    Slider timerSlider;
 
     [SerializeField]
     private GameObject planetGO;
 
-
+    private void Start()
+    {
+        timerSlider = transform.GetChild(0).GetComponentInChildren<Slider>();
+    }
     // Start is called before the first frame update
     public void CreateInfo(int maxPlayers, int currentPlayers, int timeCreation, int _timeOut, BigInteger _WeiPrice, int _id, GameObject planet)
     {
+        print("creting room info for ui");
         usersText.text = currentPlayers + " / " + maxPlayers;
         timeNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         timeSinceCreation = timeNow - timeCreation;
@@ -46,6 +53,7 @@ public class RoomUI : MonoBehaviour
         WeiPrice = _WeiPrice;
         planetGO = planet;
         timerStatus = true;
+        //timerSlider.maxValue = timeOut;
 
         var text = WalletManager.Instance.EtherBalanceText.text;
         decimal bal;
@@ -66,6 +74,7 @@ public class RoomUI : MonoBehaviour
             {
                 timer -= Time.fixedDeltaTime;
                 timeText.text = timer.ToString();
+                timerSlider.value = timer/timeOut;
             }
             else
             { 
@@ -73,6 +82,7 @@ public class RoomUI : MonoBehaviour
                 timerStatus = false;
                 canBeClosed = true;
                 rdyToNextState = false;
+                timerSlider.value = 0;
                 UpdateButtonStatus();
             }
         }
@@ -103,6 +113,10 @@ public class RoomUI : MonoBehaviour
                         }
                         else
                         {
+                            if (!canAfford)
+                            {
+                                ethText.text = "Not enough funds";
+                            }
                             
                             targetInstance.SetTarget(planetGO.transform);
 
