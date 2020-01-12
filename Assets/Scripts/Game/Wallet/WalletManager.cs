@@ -33,7 +33,6 @@ public class WalletManager : MonoBehaviour
     // create class as singleton
     private static WalletManager instance;
     public static WalletManager Instance { get { return instance; } }
-    public void Awake() { if (instance == null) instance = this; }
     public void OnDestroy() { if (instance == this) instance = null; }
 
     [Header("Config")]
@@ -106,11 +105,15 @@ public class WalletManager : MonoBehaviour
     }
 
 
-    public void Start()
+    public void Awake()
     {
-        subscribeToEvents();
-        LoadWalletsFromFile();
-        RefreshTopPanelView();
+        { if (instance == null) instance = this; }
+
+
+            subscribeToEvents();
+            LoadWalletsFromFile();
+            RefreshTopPanelView();
+
     }
 
     private void subscribeToEvents()
@@ -145,6 +148,12 @@ public class WalletManager : MonoBehaviour
     public void RefreshWalletAccountDropdown()
     {
         //walletSelectionDropdown.ClearOptions();
+        if(walletList == null)
+        {
+            print("test");
+            return;
+        }
+
         foreach (WalletData w in walletList)
         {
 
@@ -155,11 +164,6 @@ public class WalletManager : MonoBehaviour
                 walletSelectionDropdown.value = walletSelectionDropdown.options.Count;
             }
 
-        }
-
-        if (walletList.Count != 0 && !PlayerPrefs.HasKey("Tutorial"))
-        {
-            PlayerPrefs.SetInt("Tutorial", 0);
         }
 
         // add wallet create option
@@ -314,6 +318,7 @@ public class WalletManager : MonoBehaviour
             newAccountAdded.Invoke();
             loadingFinished.Invoke();
             Debug.Log(accountName);
+            getScripts.Instance.B_openRooms();
             RefreshTopPanelView();
         });
     }

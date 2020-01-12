@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3248109607687621344}
   - component: {fileID: 3462890386337347568}
   - component: {fileID: 169667735583655683}
-  - component: {fileID: 3389269231672412121}
   m_Layer: 0
   m_Name: p5_36
   m_TagString: Untagged
@@ -79,18 +78,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3389269231672412121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2010772917263321245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9022a2257dc5314193837b2c74dfdd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4273604520190632538
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +89,6 @@ GameObject:
   - component: {fileID: 6013898655213615052}
   - component: {fileID: 7346223926956792296}
   - component: {fileID: 8702528819056967532}
-  - component: {fileID: 4538760823311364585}
   m_Layer: 0
   m_Name: p3_36
   m_TagString: Untagged
@@ -170,18 +156,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4538760823311364585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4273604520190632538}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9022a2257dc5314193837b2c74dfdd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4423407784721595071
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +167,6 @@ GameObject:
   - component: {fileID: 6973892188459401016}
   - component: {fileID: 2148283690195284952}
   - component: {fileID: 7553179986227199175}
-  - component: {fileID: 6230027955868119308}
   m_Layer: 0
   m_Name: p1_36
   m_TagString: Untagged
@@ -261,18 +234,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6230027955868119308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4423407784721595071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9022a2257dc5314193837b2c74dfdd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5606686791426276340
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,7 +245,6 @@ GameObject:
   - component: {fileID: 3570735249432997233}
   - component: {fileID: 6361704804137291705}
   - component: {fileID: 4262785610588228273}
-  - component: {fileID: 6221979708233895375}
   m_Layer: 0
   m_Name: p2_36
   m_TagString: Untagged
@@ -352,18 +312,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6221979708233895375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5606686791426276340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9022a2257dc5314193837b2c74dfdd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8472177202079669404
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +362,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRotationary: 1
   rotSpeed: 10
-  damping: 10
 --- !u!1 &8605604113969688018
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +373,6 @@ GameObject:
   - component: {fileID: 4579402550329886068}
   - component: {fileID: 3249768910614380254}
   - component: {fileID: 8299018933148680182}
-  - component: {fileID: 8100761911592427006}
   m_Layer: 0
   m_Name: p4_36
   m_TagString: Untagged
@@ -494,15 +440,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8100761911592427006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8605604113969688018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9022a2257dc5314193837b2c74dfdd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

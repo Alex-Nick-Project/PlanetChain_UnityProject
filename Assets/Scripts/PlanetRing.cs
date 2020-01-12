@@ -29,14 +29,16 @@ public class PlanetRing : MonoBehaviour
         BuildRingMesh();
     }
 
-    void OnValidate()
-    {
-        if (ring == null || ringMesh == null)
-        {
-            SetUpRing();
-        }
-        BuildRingMesh();
-    }
+    //debug
+
+    //void OnValidate()
+    //{
+    //    if (ring == null || ringMesh == null)
+    //    {
+    //        SetUpRing();
+    //    }
+    //    BuildRingMesh();
+    //}
 
     void SetUpRing()
     {

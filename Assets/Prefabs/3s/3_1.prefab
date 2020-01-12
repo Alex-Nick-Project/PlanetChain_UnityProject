@@ -48,7 +48,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRotationary: 1
   rotSpeed: 10
-  damping: 10
 --- !u!1 &6155669001161438450
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,7 +59,6 @@ GameObject:
   - component: {fileID: 5274585356508128072}
   - component: {fileID: 970856319212132041}
   - component: {fileID: 3659764311696862547}
-  - component: {fileID: 681011472448227573}
   m_Layer: 0
   m_Name: p1_51
   m_TagString: Untagged
@@ -128,18 +126,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &681011472448227573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6155669001161438450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9022a2257dc5314193837b2c74dfdd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8399716238307017989
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +137,6 @@ GameObject:
   - component: {fileID: 6653580046347455563}
   - component: {fileID: 6900479142367648281}
   - component: {fileID: 5902977335628585501}
-  - component: {fileID: 8864265633592435861}
   m_Layer: 0
   m_Name: p3_51
   m_TagString: Untagged
@@ -219,18 +204,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8864265633592435861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8399716238307017989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9022a2257dc5314193837b2c74dfdd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8482536017256179573
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +215,6 @@ GameObject:
   - component: {fileID: 7280135248741003876}
   - component: {fileID: 598431577419817666}
   - component: {fileID: 4227764550250707800}
-  - component: {fileID: 830543206766028327}
   m_Layer: 0
   m_Name: p2_51
   m_TagString: Untagged
@@ -310,15 +282,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &830543206766028327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8482536017256179573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9022a2257dc5314193837b2c74dfdd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

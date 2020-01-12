@@ -4,19 +4,20 @@ using UnityEngine;
 using TMPro;
 public class CheckTutorial : MonoBehaviour
 {
+    public static CheckTutorial instance;
     Animator anim;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
     }
-    private void OnEnable()
+    public void StartTutorial()
     {
 
-        if (!PlayerPrefs.HasKey("Tutorial") || PlayerPrefs.GetInt("Tutorial") == 1)
+        if (PlayerPrefs.GetInt("Tutorial") == 1)
         {
             //tutorialPanel.transform.Find("Tutorial").gameObject.SetActive(true);
-            anim.SetTrigger("Tutorial");
+            
         }
     }
 

@@ -23,6 +23,13 @@ public class RandomizeMesh : MonoBehaviour
 
     private void Awake()
     {
+        // to have all planets interactable
+        gameObject.tag = "Planet";
+        gameObject.GetComponent<BoxCollider>().isTrigger = true;
+        var rb = gameObject.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.isKinematic = true;
+
         // stores the random prefab index
         random = Random.Range(0, prefabs.Length - 1);
 

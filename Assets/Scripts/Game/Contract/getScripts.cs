@@ -17,10 +17,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using TMPro;
-
+using System.Linq;
 
 public class getScripts : MonoBehaviour
 {
+    public bool isConnected;
+
     [SerializeField]
     List<RoomInfo> totalRooms;
     [SerializeField]
@@ -30,12 +32,16 @@ public class getScripts : MonoBehaviour
 
     [SerializeField] // deve esserci draggata la search box
     TMP_InputField searchInput;
+    [SerializeField]
+    CheckTutorial ct;
 
     [SerializeField]
     [Range(1, 10)]
-
     float sensibility;
     float sens;
+
+    [SerializeField]
+    float refreshRateSeconds;
 
     [SerializeField]
     ItemSpawner itemSpawner;
@@ -46,6 +52,9 @@ public class getScripts : MonoBehaviour
     [SerializeField]
     Transform scrollViewContent;
 
+    [SerializeField]
+    Animator anim;
+
     contractSetup contract = new contractSetup();
 
 
@@ -55,7 +64,9 @@ public class getScripts : MonoBehaviour
 
     private string playerName = "";
 
-    private void Awake()
+    bool isUpdating;
+
+    private void Start()
     {
         if (_instance != null && _instance != this)
         {
@@ -65,13 +76,20 @@ public class getScripts : MonoBehaviour
         {
             _instance = this;
         }
+
+        B_updateData();
     }
 
-    private void Start()
+    public void B_updateData()
     {
-        if(WalletManager.Instance.GetSelectedWalletData() != null)
+        if (isUpdating)
         {
-            B_openRooms();
+            StopAllCoroutines();
+            StartCoroutine("updateData");
+        }
+        else
+        {
+            StartCoroutine("updateData");
         }
     }
     public void B_getMyRoom()
@@ -167,40 +185,62 @@ public class getScripts : MonoBehaviour
 
     private void AddLobbys(int maxPlayers, int currentPlayers, int timeCreation, int timeOut, int _id, BigInteger WeiPrice, bool clear = false)
     {
-        
-        var planetInstance = itemSpawner.updateRooms(maxPlayers-1); // qui' e' il problema, vorrei pescare il gameobject instanziato tramite la funzione, ma non lo prende e non capisco perche'
-
-        RoomInfo ri = planetInstance.AddComponent<RoomInfo>();
-        GameObject UIinstance = Instantiate(roomUIPrefab, scrollViewContent);
-
-        ri.planet = planetInstance;
-        ri.roomCap = maxPlayers;
-        ri.roomCurrentPlayers = currentPlayers;
-        ri.timeOfCreation = timeCreation;
-        ri.timeLeft = timeOut;
-        ri.roomID = _id;
-        ri.roomPrice = WeiPrice;
-        ri.ui = UIinstance;
-
-        UIinstance.GetComponent<RoomUI>().CreateInfo(ri.roomCap, ri.roomCurrentPlayers, ri.timeOfCreation, ri.timeLeft, ri.roomPrice, ri.roomID, ri.planet);
-
-        currentUIRooms.Add(ri.ui);
-        currentPlanetRooms.Add(ri.planet);
-        totalRooms.Add(ri);
-        print(ri.planet = planetInstance);
-    }
-    public IEnumerator getRoomsData()
-    {
-        var wait = 0;
-        yield return new WaitForSeconds(wait);
-        wait = 2;
-        WalletData wd = WalletManager.Instance.GetSelectedWalletData();
-        var getOpenRequest = new EthCallUnityRequest(WalletManager.Instance.networkUrl);
-        if (wd.address != null)
+        if(totalRooms.Count != 0)
         {
+            if(totalRooms.Any(f => f.roomID == _id))
+            {
+                print("test");
+                return;
+            }
+            else
+            {
+                var planetInstance = itemSpawner.updateRooms(maxPlayers - 1); // qui' e' il problema, vorrei pescare il gameobject instanziato tramite la funzione, ma non lo prende e non capisco perche'
 
+                RoomInfo ri = planetInstance.AddComponent<RoomInfo>();
+                GameObject UIinstance = Instantiate(roomUIPrefab, scrollViewContent);
+
+                ri.planet = planetInstance;
+                ri.roomCap = maxPlayers;
+                ri.roomCurrentPlayers = currentPlayers;
+                ri.timeOfCreation = timeCreation;
+                ri.timeLeft = timeOut;
+                ri.roomID = _id;
+                ri.roomPrice = WeiPrice;
+                ri.ui = UIinstance;
+
+                UIinstance.GetComponent<RoomUI>().CreateInfo(ri.roomCap, ri.roomCurrentPlayers, ri.timeOfCreation, ri.timeLeft, ri.roomPrice, ri.roomID, ri.planet);
+
+                currentUIRooms.Add(ri.ui);
+                currentPlanetRooms.Add(ri.planet);
+                totalRooms.Add(ri);
+                print(ri.planet = planetInstance);
+            }
         }
+        else
+        {
+            var planetInstance = itemSpawner.updateRooms(maxPlayers - 1); // qui' e' il problema, vorrei pescare il gameobject instanziato tramite la funzione, ma non lo prende e non capisco perche'
+
+            RoomInfo ri = planetInstance.AddComponent<RoomInfo>();
+            GameObject UIinstance = Instantiate(roomUIPrefab, scrollViewContent);
+
+            ri.planet = planetInstance;
+            ri.roomCap = maxPlayers;
+            ri.roomCurrentPlayers = currentPlayers;
+            ri.timeOfCreation = timeCreation;
+            ri.timeLeft = timeOut;
+            ri.roomID = _id;
+            ri.roomPrice = WeiPrice;
+            ri.ui = UIinstance;
+
+            UIinstance.GetComponent<RoomUI>().CreateInfo(ri.roomCap, ri.roomCurrentPlayers, ri.timeOfCreation, ri.timeLeft, ri.roomPrice, ri.roomID, ri.planet);
+
+            currentUIRooms.Add(ri.ui);
+            currentPlanetRooms.Add(ri.planet);
+            totalRooms.Add(ri);
+            print(ri.planet = planetInstance);
+        }   
     }
+
     public IEnumerator GetName(int id, BigInteger bet, int prn, string selection = "JoinRoom")
     {
         var wait = 0;
@@ -269,24 +309,77 @@ public class getScripts : MonoBehaviour
     {
         foreach (RoomInfo ri in totalRooms)
         {
-            if (searchInput.text != null)
+            decimal textToValue;
+            decimal.TryParse(searchInput.text, out textToValue);
+            if (textToValue > 0)
             {
-                sens = System.Convert.ToInt64(searchInput.text);
+                float.TryParse(searchInput.text, out sens);
                 sens /= sensibility;
 
                 // if the searched price is in range
-                if (Mathf.Approximately(sens, (int)ri.roomPrice + sens) || Mathf.Approximately(sens, (int)ri.roomPrice - sens))
+                if (Mathf.Approximately(sens, (float)ri.roomPrice + sens) || Mathf.Approximately(sens, (float)ri.roomPrice - sens))
                 {
-                    // doesn't remove the instance from UI scroll view
-                    return;
+                    ri.ui.gameObject.SetActive(true);
                 }
                 else
                 {
                     currentUIRooms.Remove(ri.ui);
-                    // should have a function in the RoomUI, 
-                    // that sets the GO ready to be used from others (instead of destroying and instantiating over and over again)
+                    ri.ui.gameObject.SetActive(false);
                 }
             }
         }
+    }
+
+    IEnumerator updateData()
+    {
+        isUpdating = true;
+
+        if (Application.internetReachability != NetworkReachability.NotReachable)
+        {
+            isConnected = true;
+        }
+        else
+        {
+            isConnected = false;
+        }
+
+        if (WalletManager.Instance.GetSelectedWalletData() == null)
+        {
+            print("deleting tutorial key");
+            PlayerPrefs.DeleteKey("Tutorial");
+        }
+
+        if (WalletManager.Instance.GetSelectedWalletData() != null && isConnected)
+        {
+            print("has a wallet & is connected");
+            B_openRooms();
+            anim.SetTrigger("GameLoaded");
+        }
+        else if (!isConnected)
+        {
+            anim.SetTrigger("GameFailedLoad");
+        }
+        else if (WalletManager.Instance.GetSelectedWalletData() == null && isConnected)
+        {
+            if (!PlayerPrefs.HasKey("Tutorial"))
+            {
+                print("should start tutorial");
+                anim.SetTrigger("GameLoaded");
+                anim.SetTrigger("Tutorial");
+            }
+            else
+            {
+                print("has a tutorial key");
+                anim.SetTrigger("GameLoaded");
+            }
+
+
+
+            //anim.SetTrigger("WelcomeNewUser");
+        }
+
+        yield return new WaitForSeconds(refreshRateSeconds);
+        isUpdating = false;
+        StartCoroutine("updateData");
     }
 }

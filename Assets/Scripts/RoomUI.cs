@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using Nethereum.Util;
+﻿using Nethereum.Util;
 using System;
+using System.Numerics;
+using TMPro;
+using UnityEngine;
 
 public class RoomUI : MonoBehaviour
 {
     public int stage;
+    public bool rdyToNextState;
 
     [SerializeField]
     TextMeshProUGUI buttonText, usersText, timeText, ethText;
@@ -18,149 +16,167 @@ public class RoomUI : MonoBehaviour
     private int id;
     private BigInteger WeiPrice;
     private decimal betETH;
-    private bool rdyToNextState;
     private bool timerStatus;
     private float timer;
     private bool insideRoom;
+    private bool isPressed;
+    public bool hasJoinned;
+    public bool canAfford;
+    public bool canBeClosed;
+    private float timeNow;
+    private float timeSinceCreation;
+    private float timeOut;
+    CameraTarget targetInstance;
 
     [SerializeField]
     private GameObject planetGO;
 
+
     // Start is called before the first frame update
-    public void CreateInfo(int maxPlayers, int currentPlayers, int timeCreation, int timeOut, BigInteger _WeiPrice, int _id, GameObject planet)
+    public void CreateInfo(int maxPlayers, int currentPlayers, int timeCreation, int _timeOut, BigInteger _WeiPrice, int _id, GameObject planet)
     {
         usersText.text = currentPlayers + " / " + maxPlayers;
-        timer = (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - (timeCreation + timeOut));
-        timeText.text = timer.ToString();
-        timerStatus = true;
+        timeNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        timeSinceCreation = timeNow - timeCreation;
+        timeOut = (float)_timeOut;
         betETH = UnitConversion.Convert.FromWei(_WeiPrice);
         ethText.text = betETH * currentPlayers + " / " + betETH * maxPlayers;
         id = _id;
         WeiPrice = _WeiPrice;
         planetGO = planet;
+        timerStatus = true;
+
+        var text = WalletManager.Instance.EtherBalanceText.text;
+        decimal bal;
+        decimal.TryParse(text, out bal);
+        if (bal >= betETH)
+        {
+            canAfford = true;
+        }
     }
 
     private void LateUpdate()
     {
         if(timerStatus)
         {
-            timer -= Time.deltaTime;
-            if(timer <= 0)
+            timer = timeOut - timeSinceCreation;
+
+            if (timer >= 0)
             {
+                timer -= Time.fixedDeltaTime;
+                timeText.text = timer.ToString();
+            }
+            else
+            { 
+                timeText.text = "Ready to be closed";
                 timerStatus = false;
-                stage = 2;
+                canBeClosed = true;
                 rdyToNextState = false;
                 UpdateButtonStatus();
             }
         }
+       
+
+
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnEnable()
     {
-        if (other.gameObject.tag == "Planet" && !insideRoom /* && check if enough balance*/)
-        {
-            stage = 1;
-            rdyToNextState = false;
-            UpdateButtonStatus();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Planet")
-        {
-            stage = 0;
-            rdyToNextState = false;
-            UpdateButtonStatus();
-        }
-    }
-
-    void Start()
-    {
+        targetInstance = FindObjectOfType<CameraTarget>();
         UpdateButtonStatus();
     }
     public void UpdateButtonStatus()
     {
-        switch (stage)
+        if (!isPressed)
         {
-            case 0:
-                {
-                    if(!rdyToNextState)
+
+            isPressed = true;
+            switch (stage)
+            {
+                case 0:
                     {
-                        buttonText.text = "Check";
-                        rdyToNextState = true;
-                    }
-                    else
-                    {
-                        var targetInstance = FindObjectOfType<CameraTarget>();
-                        targetInstance.SetTarget(planetGO.transform);
-
-                        // logic to move camera towards planet
-
-                        // to do stage++; if player IS focusing on planet && can afford it && !insideRoom, then call this function || should be working
-
-                        // to do stage == 2; if room can be closed, then call this function || should be working
-                    }
-
-                    break;
-                }
-            case 1:
-                {
-                    if (!rdyToNextState)
-                    {
-                        buttonText.text = "Join";
-                        rdyToNextState = true;
-                    }
-                    else
-                    {
-                        int luckyNumber;
-                        int.TryParse(numberText.text, out luckyNumber);
-
-                        if (numberText != null && luckyNumber >= 0 && luckyNumber <= 10)
+                        if (!rdyToNextState)
                         {
-                            getScripts.Instance.nameReturn(id, WeiPrice, luckyNumber);
                             buttonText.text = "Check";
-                            var inputField = numberText.transform.GetChild(0).GetChild(1).transform;
-                            inputField.SetParent(numberText.transform.parent);
-                            numberText.gameObject.SetActive(false);
                             rdyToNextState = true;
-                            stage = 0;
-                            return;
                         }
                         else
                         {
-                            buttonText.text = "Insert Number";
-                            rdyToNextState = false;
-                            Invoke("UpdateButtonStatus", 3);
-                            return;
+                            
+                            targetInstance.SetTarget(planetGO.transform);
+
+                            // logic to move camera towards planet // should be working
+
+                            // to do stage++; if player IS focusing on planet && can afford it && !insideRoom, then call this function || should be working
+
+                            // to do stage == 2; if room can be closed, then call this function || should be working
                         }
+
+                        isPressed = false;
+                        return;
                     }
-
-                    // to do stage--; if player is NOT on focus on planet
-
-                    break;
-                }
-            case 2:
-                {
-                    if(!rdyToNextState)
+                case 1:
                     {
-                        // close call //
+                        if (!rdyToNextState)
+                        {
+                            buttonText.text = "Join";
+                            rdyToNextState = true;
+                        }
+                        else
+                        {
+                            int luckyNumber;
+                            int.TryParse(numberText.text, out luckyNumber);
 
-                        // get a winner to display and ending/exploding animation //
-                        rdyToNextState = true;
+                            if (numberText.text != "" && luckyNumber >= 0 && luckyNumber <= 10)
+                            {
+                                getScripts.Instance.nameReturn(id, WeiPrice, luckyNumber);
+                                hasJoinned = true;
+                                buttonText.text = "Check";
+                                var text = numberText.text;
+                                var inputField = numberText.transform.GetChild(0).Find("Text").transform;
+                                inputField.parent = numberText.transform.parent;
+                                inputField.GetComponent<TextMeshProUGUI>().text = text;
+                                numberText.gameObject.SetActive(false);
+                                rdyToNextState = true;
+                                stage = 0;
+                                isPressed = false;
+                                return;
+                            }
+                            else
+                            {
+                                buttonText.text = "Insert Number";
+                                rdyToNextState = false;
+                                Invoke("UpdateButtonStatus", 3);
+                                isPressed = false;
+                                return;
+                            }
+                        }
+
+                        // to do stage--; if player is NOT on focus on planet // should be working
+
+                        return;
                     }
-                    else
+                case 2:
                     {
-                        // display closed room data;
+                        if (!rdyToNextState)
+                        {
+                            // get a winner to display and ending/exploding animation //
+                            buttonText.text = "Close";
+                            rdyToNextState = true;
+                        }
+                        else
+                        {
+                            // display closed room data;
+                        }
+
+
+                        isPressed = false;
+                        return;
                     }
-
-                    
-
-                    break;
-                }
+            }
         }
-    }
 
+    }
     void Update()
     {
 
