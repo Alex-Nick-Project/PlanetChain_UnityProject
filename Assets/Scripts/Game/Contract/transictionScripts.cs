@@ -209,7 +209,7 @@ public class transictionScripts : MonoBehaviour
         WalletData wd = WalletManager.Instance.GetSelectedWalletData();
         if (wd.address != null)
         {
-            var transactionInput = contract.closeRoomInput(wd.address, wd.privateKey, id, new HexBigInteger(3000000));
+            var transactionInput = contract.closeRoomInput(wd.address, wd.privateKey, new HexBigInteger(3000000), id);
 
             var transactionSignedRequest = new TransactionSignedUnityRequest(WalletManager.Instance.networkUrl, wd.privateKey);
             yield return transactionSignedRequest.SignAndSendTransaction(transactionInput);
