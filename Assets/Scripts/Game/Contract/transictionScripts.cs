@@ -66,6 +66,11 @@ public class transictionScripts : MonoBehaviour
         }
         
     }
+    public void _closeRoom(int id)
+    {
+        StartCoroutine(CloseRooms(id));
+    }
+
     public void _JoinRoom(int id, BigInteger weiPrice, int prn)
     {
         StartCoroutine(JoinRooms(id, weiPrice, prn));
@@ -173,6 +178,47 @@ public class transictionScripts : MonoBehaviour
                 var transactionHash = transactionSignedRequest.Result;
 
                 Debug.Log("Join Room:" + transactionHash);
+
+                //create a poll to get the receipt when mined
+                var transactionReceiptPolling = new TransactionReceiptPollingRequest(WalletManager.Instance.networkUrl);
+                //checking every 2 seconds for the receipt
+                yield return transactionReceiptPolling.PollForReceipt(transactionHash, 2);
+
+                if (transactionReceiptPolling.Exception == null)
+                {
+                    WalletManager.Instance.RefreshTopPanelView();
+                    Debug.Log("Good Mined");
+                }
+                else
+                {
+                    Debug.Log("Bad Mined");
+                }
+            }
+            else
+            {
+                Debug.Log("error");
+                Debug.Log(transactionSignedRequest.Exception.ToString());
+            }
+        }
+    }
+    public IEnumerator CloseRooms(int id)
+    {
+        var wait = 0;
+        yield return new WaitForSeconds(wait);
+        wait = 2;
+        WalletData wd = WalletManager.Instance.GetSelectedWalletData();
+        if (wd.address != null)
+        {
+            var transactionInput = contract.closeRoomInput(wd.address, wd.privateKey, id, new HexBigInteger(3000000));
+
+            var transactionSignedRequest = new TransactionSignedUnityRequest(WalletManager.Instance.networkUrl, wd.privateKey);
+            yield return transactionSignedRequest.SignAndSendTransaction(transactionInput);
+            Debug.Log(wd.address);
+            if (transactionSignedRequest.Exception == null)
+            {
+                var transactionHash = transactionSignedRequest.Result;
+
+                Debug.Log("Closing Room:" + transactionHash);
 
                 //create a poll to get the receipt when mined
                 var transactionReceiptPolling = new TransactionReceiptPollingRequest(WalletManager.Instance.networkUrl);
