@@ -180,7 +180,7 @@ public class RoomUI : MonoBehaviour
                         }
                         else
                         {
-                            transictionScripts.Instance.CloseRooms(id);
+                            transictionScripts.Instance._closeRoom(id);
                             // display closed room data;
                         }
 

@@ -451,7 +451,7 @@ public class contractSetup {
         return contract.GetFunction("close");
     }
 
-    public TransactionInput closeRoomInput(string addressFrom, string privateKey, HexBigInteger gas, int id)
+    public TransactionInput closeRoomInput(string addressFrom, string privateKey, HexBigInteger gas, int id , HexBigInteger valueAmount = null)
     {
         var numberBytes = new IntTypeEncoder().Encode(id);
         var sha3 = new Nethereum.Util.Sha3Keccack();
@@ -461,8 +461,8 @@ public class contractSetup {
         var ethEcdsa = MessageSigner.ExtractEcdsaSignature(signature);
         object[] array = new object[] { id };
         var
-        function = createUserFunction();
-        return function.CreateTransactionInput(addressFrom, array);
+        function = closeRoomFunction();
+        return function.CreateTransactionInput(addressFrom, gas, valueAmount, array);
     }
 
     //CREATE USER
