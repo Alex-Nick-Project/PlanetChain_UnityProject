@@ -67,6 +67,11 @@ public class contractSetup {
 				'internalType': 'uint256',
 				'name': 'timer',
 				'type': 'uint256'
+			},
+			{
+				'internalType': 'uint256',
+				'name': 'prn',
+				'type': 'uint256'
 			}
 		],
 		'name': 'createRoom',
@@ -308,7 +313,7 @@ public class contractSetup {
 		'type': 'function'
 	}
 ]";
-    private static string contractAddress = "0x09c36e92347218F8e5a0109024BD8402eEd45AA3";
+    private static string contractAddress = "0xD363E542c28a28E8e7c4198aAaF1fE1b668852A5";
 
 	private Contract contract;
     public contractSetup () {
