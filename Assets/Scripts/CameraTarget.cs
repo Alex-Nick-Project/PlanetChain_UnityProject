@@ -58,6 +58,10 @@ public class CameraTarget : MonoBehaviour
                 rUI.rdyToNextState = false;
                 rUI.UpdateButtonStatus();
             }
+            if(!rUI.canAfford)
+            {
+                rUI.ethText.text = "not enough funds";
+            }
 
         }
     }

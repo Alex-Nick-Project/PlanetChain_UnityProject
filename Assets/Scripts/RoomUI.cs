@@ -11,12 +11,13 @@ public class RoomUI : MonoBehaviour
     public bool rdyToNextState;
 
     [SerializeField]
-    TextMeshProUGUI buttonText, usersText, timeText, ethText;
+    public TextMeshProUGUI buttonText, usersText, timeText, ethText;
     [SerializeField]
     TMP_InputField numberText;
     private int id;
     private BigInteger WeiPrice;
     private decimal betETH;
+    string betETHText;
     private bool timerStatus;
     private float timer;
     private bool insideRoom;
@@ -48,10 +49,12 @@ public class RoomUI : MonoBehaviour
         timeSinceCreation = timeNow - timeCreation;
         timeOut = (float)_timeOut;
         betETH = UnitConversion.Convert.FromWei(_WeiPrice);
-        ethText.text = betETH * currentPlayers + " / " + betETH * maxPlayers;
+        betETHText = betETH * currentPlayers +" / " + betETH * maxPlayers;
+        ethText.text = betETHText;
         id = _id;
         WeiPrice = _WeiPrice;
         planetGO = planet;
+        timer = timeOut - timeSinceCreation;
         timerStatus = true;
         //timerSlider.maxValue = timeOut;
 
@@ -68,7 +71,6 @@ public class RoomUI : MonoBehaviour
     {
         if(timerStatus)
         {
-            timer = timeOut - timeSinceCreation;
 
             if (timer >= 0)
             {
@@ -109,14 +111,11 @@ public class RoomUI : MonoBehaviour
                         if (!rdyToNextState)
                         {
                             buttonText.text = "Check";
+                            ethText.text = betETHText;
                             rdyToNextState = true;
                         }
                         else
                         {
-                            if (!canAfford)
-                            {
-                                ethText.text = "Not enough funds";
-                            }
                             
                             targetInstance.SetTarget(planetGO.transform);
 
@@ -181,6 +180,7 @@ public class RoomUI : MonoBehaviour
                         }
                         else
                         {
+                            transictionScripts.Instance.CloseRooms(id);
                             // display closed room data;
                         }
 

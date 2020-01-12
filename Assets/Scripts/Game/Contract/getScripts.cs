@@ -316,16 +316,13 @@ public class getScripts : MonoBehaviour
     {
         foreach (RoomInfo ri in totalRooms)
         {
-            decimal textToValue;
-            decimal.TryParse(searchInput.text, out textToValue);
+            float textToValue;
+            float.TryParse(searchInput.text, out textToValue);
             if (textToValue > 0)
             {
-                float.TryParse(searchInput.text, out sens);
-                sens /= sensibility;
-                print(sens);
 
                 // if the searched price is in range
-                if (Mathf.Approximately(sens, (float)ri.roomPrice + sens) || Mathf.Approximately(sens, (float)ri.roomPrice - sens))
+                if (Mathf.Approximately(textToValue, (float)UnitConversion.Convert.FromWei(ri.roomPrice)))
                 {
                     ri.ui.gameObject.SetActive(true);
                 }
